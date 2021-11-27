@@ -35,7 +35,7 @@ void printList(LinkedList* List);
 
 
 // Case 4, Finds element in list by number, prints name and shows value
-ListNode* findByPosition(int position, LinkedList* List);
+ListNode* findByPosition(char* input[], LinkedList* List);
 
 
 // Case 5, Finds element in list by name, calculates position in list and shows value
@@ -63,17 +63,20 @@ void removeElement(ListNode* cur, LinkedList* List);
 
 
 // Case 11, moves element towards back of list
-int moveBack(ListNode* cur);
+void moveBack(ListNode* cur, LinkedList* List);
 
 
 // Case 12, moves element towards front of list
-int moveUp(ListNode* cur);
+void moveUp(ListNode* cur, LinkedList* List);
 
 
 // Case 13, Prints all elements and values to file in order
 void finalPrint(LinkedList* List);
 
 // Case 14, displays all possible commands
-void displayCommands(ListNode* cur);
+void displayCommands();
+
+// Case 15, finds current element's index
+int position(ListNode* cur);
 
 #endif

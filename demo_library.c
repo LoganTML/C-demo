@@ -147,12 +147,17 @@ int classify(char* input[]) {
         printf("Printing commands:\n");
         return 14;
 
+    } else if (!strcmp(cmd, "position")) {
+        // locates current element's position (index + 1)
+        printf("Locating position: \n");
+        return 15;
     } else {
         // if command unrecognized
 
         printf("Command unrecognized; enter 'help' for list of commands");
         return 0;
     }
+
 }
 
 
@@ -260,8 +265,9 @@ void printList(LinkedList* List) {
 
 
 // Case 4, Finds element in list by number, prints name and shows value
-ListNode* findByPosition(int position, LinkedList* List) {
+ListNode* findByPosition(char* input[], LinkedList* List) {
     int i = 1;
+    int position = atoi(*input);
     ListNode* cur = List->head;
     while (i != position) {
         cur = cur->next;
@@ -273,7 +279,13 @@ ListNode* findByPosition(int position, LinkedList* List) {
 
 
 // Case 5, Finds element in list by name, calculates position in list and shows value
-ListNode* findByName(char name[], LinkedList* List);
+ListNode* findByName(char name[], LinkedList* List) {
+    if (List->head == NULL) {
+        return NULL;
+    } else {
+
+    }
+}
 
 
 // Case 6, Moves to next element (towards back)
@@ -299,15 +311,20 @@ void prev(ListNode* cur, LinkedList* List) {
 // Case 8, Displays current element
 void currentElement(ListNode* cur) {
     if (cur == NULL) {
-        printf("Error: no node selected\n");
+        printf("No element currently selected\n");
     } else {
-        printf("Current node: '%s', %d'", cur->name, cur->value);
+        printf("Current node: '%s', %d, position: %d", cur->name, cur->value, position(cur));
     }
 }
 
 
 // Case 9, Modifies value of element in list
-void changeValue(ListNode* cur, int newValue) {
+void changeValue(ListNode* cur, char* input[]) {
+    int newValue = atoi(*input);
+    if (cur == NULL || newValue != NULL) {
+        printf("Error: invalid input\n");
+        return;
+    }
     cur->value = newValue;
 }
 
@@ -326,26 +343,77 @@ void removeElement(ListNode* cur, LinkedList* List) {
         cur->prev->next = cur->next;
         free(cur);
     }
+    cur = NULL;
 }
 
 
 // Case 11, moves element towards back of list
-void moveBack(ListNode* cur) {
-    if (cur->next == NULL) {
+// Slightly confusing because "next" goes towards the back, I know my b
+void moveBack(ListNode* cur, LinkedList* List) {
+
+    // If cur is null or last element in list, can't switch with next
+    if (cur == NULL || cur->next == NULL) {
         return;
     }
+
+    ListNode* next_node = cur->next;
+    
+    //Connect outsides to outsides
+    cur->next = next_node->next;
+    next_node->prev = cur->prev;
+    //Connect them to each other
+    cur->prev = next_node;
+    next_node->next = cur;
+
 }
 
 
-// Case 12, moves element towards front of list
-int moveUp(ListNode* cur);
+// Case 12, moves element towards top of list
+void moveUp(ListNode* cur, LinkedList* List) {
+    // If cur is first element, can't move up
+    if (cur == NULL || cur->prev == NULL) {
+        return;
+    }
+
+    ListNode* prev_node = cur->prev;
+
+    //Link outsides
+    cur->prev = prev_node->prev;
+    prev_node->next = cur->next;
+    //Link insides
+    cur->next = prev_node;
+    prev_node->prev = cur;
+
+}
 
 
-// Case 13, Prints all elements and values to file in order
-void finalPrint(LinkedList* List);
+// Case 13, Prints all elements and values to file and console in order.  Deletes list.
+void finalPrint(LinkedList* List) {
+    if (List->head == NULL) {
+        printf("List empty\n");
+        return;
+    } else {
+        ListNode* cur = NULL;
+        ListNode* next_e = List->head;
+
+        FILE* output_file = fopen("output.txt", "w+");
+
+        int i = 0;
+        while (next_e != NULL) {
+            cur = next_e;
+            printf("%d) '%s', %d\n", ++i, cur->name, cur->value);
+            fprintf("%d) '%s', %d\n", ++i, cur->name, cur->value);
+
+            next_e = cur->next;
+            free(cur);
+        }
+
+        fclose(output_file);
+    }
+}
 
 // Case 14, displays all possible commands
-void displayCommands(ListNode* cur) {
+void displayCommands() {
     FILE* command_list = fopen("command_list.txt", "r");
         char c = fgetc(command_list);
         while (c != EOF) {
@@ -354,4 +422,17 @@ void displayCommands(ListNode* cur) {
         }
         printf("\n");
         fclose(command_list);
+}
+
+int position(ListNode* cur) {
+    if (cur == NULL) {
+        return 0;
+    } else {
+        int i = 1;
+        while (cur->prev != NULL) {
+            cur = cur->prev;
+            i++;
+        }
+        return i;
+    }
 }

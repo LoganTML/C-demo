@@ -5,8 +5,8 @@ Commands:
 3. "print": Prints current list.
 4. "find [+ number]: Selects element at given index in list.
 5. "find [+ name]: Selects element in list with given name.
-6. "next": Selects next element in list.
-7. "prev": Selects previous element in list.
+6. "next": Selects next element in list.  If no element is selected, selects first element in list.
+7. "prev": Selects previous element in list. If no element is selected, selects last element in list.
 8. "cur": Prints current element's name and value.
 9. "cv [+ number]": Changes curren element's value to given number.
 10. "del": Deletes current element.
