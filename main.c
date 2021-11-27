@@ -12,7 +12,11 @@
 int main() {
     
     //Initializes list
-    ListNode* head = NULL;
+    LinkedList List;
+    List.head = NULL;
+    List.tail = NULL;
+
+    //Creates pointer to current node
     ListNode* cur = NULL;
 
     //Prints greeting
@@ -20,7 +24,7 @@ int main() {
     printf("%c",intro);
 
     
-    
+    //Takes user input up to 30 characters
     char input[30];
     input[0] = '\0';
     scanf("%s", input);
@@ -48,12 +52,12 @@ int main() {
             break;
 
             case 4:
-                //Selects element by name, calculates position, shows value
+                //Selects element by number, shows name and value
 
             break;
 
             case 5:
-                //Selects element by number, shows name and value
+                //Selects element by name, calculates position, shows value
 
             break;
 
@@ -68,7 +72,7 @@ int main() {
             break;
 
             case 8:
-                //Instructions for operations on element
+                // Case 8, Displays current element
 
             break;
 
@@ -83,7 +87,22 @@ int main() {
             break;
 
             case 11:
+                // Case 11, moves element towards back of list
+
+            break;
+
+            case 12:
+                // Case 12, moves element towards front of list
+
+            break;
+
+            case 13:
                 //Prints all elements and values to file in order
+
+            break;
+
+            case 14:
+                //Displays all possible commands
 
             break;
 
@@ -93,22 +112,6 @@ int main() {
 
                 int fclose(FILE* fp)
             */
-
-
-           while (cur != NULL) {
-            
-               //Prints current element
-                currentElement(cur);
-
-                //Gets user input
-                scanf("%s", input);
-                classified = classify(input);
-
-                switch (classified)
-                {
-                    case 
-                }
-           }
 
         }
 
