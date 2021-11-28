@@ -1,0 +1,21 @@
+Commands:
+
+1. "add [+ name and/or number]": Adds element to back of list with given name and/or value.
+2. "count": Counts number of elements in list.
+3. "print": Prints current list.
+4. "find [+ number]: Selects element at given index in list.
+5. "find [+ name]: Selects element in list with given name.
+6. "next": Selects next element in list.  If no element is selected, selects first element in list.
+7. "prev": Selects previous element in list. If no element is selected, selects last element in list.
+8. "cur": Prints current element's name and value.
+9. "cv [+ number]": Changes curren element's value to given number.
+10. "del": Deletes current element.
+11. "back": Moves element one spot towards end of list.
+12. "forward": Moves element one spot towards beginning of list.
+13. "file": Prints entire list to file and deletes list.
+14. "help": Shows all available commands.
+
+All commands work regardless of case.
+If possible use exactly one space between command and name/numbers.
+
+If you're a potential employer reading this please hire me.
