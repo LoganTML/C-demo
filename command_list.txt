@@ -14,6 +14,7 @@ Commands:
 12. "forward": Moves element one spot towards beginning of list.
 13. "file": Prints entire list to file and deletes list.
 14. "help": Shows all available commands.
+15. "position": displays current element's position in list
 
 All commands work regardless of case.
 If possible use exactly one space between command and name/numbers.

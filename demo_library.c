@@ -5,51 +5,43 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include "demo_library.h"
 
 
 
-//Defines ListNode
-typedef struct{
-        int value;
-        char name[20];
-        ListNode* next;
-        ListNode* prev;
+//ListNode and LinkedList defined in library?
 
-} ListNode;
-
-typedef struct{
-    ListNode* head;
-    ListNode* tail;
-} LinkedList;
 
 
 // Scans input for a command
-int classify(char* input[]) {
+int classify(char input[]) {
     
     //Copies input to command string and truncates it to the first word only
-    char cmd[] = *input;
+    char cmd[30];
+    strcpy(cmd, input);
     int i = 0;
     for (i = 0; cmd[i] != ' ' && cmd[i] != '\0'; i++) {}
     cmd[i] = '\0';
-
-    // could also be done with strcpy, strlen, 
+    
+    printf("cmd: %s\n", cmd);
 
     //If there's more input after the command, removes command from the front of input
-    if (*input[i] == ' ') {
+    if (input[i] == ' ') {
         int j = 0;
         for (j = 0; input[i] != '\0'; j++) {
-                *input[j] = *input[i];
+                input[j] = input[i];
                 i++;
         }
-        *input[j] = '\0';
+        input[j] = '\0';
         
     }
 
-    strlwn(cmd);
+     strlwr(cmd); // what does this mean again
 
-    /* 
-    Compares cmd to list of known commands
+    printf("cmd but now lowercase: %s\n");
+    
+    /* Compares cmd to list of known commands
     Strcasecmp is like strcmp; compares to strings and returns 0 if they're identical
          but isn't case sensitive
 
@@ -57,10 +49,11 @@ int classify(char* input[]) {
         saves runtime for strcmp
     */
 
+
     if (!strcmp(cmd, "add")) {
         // adds element to back of list
 
-        printf("Adding element to list: %s\n", *input);
+        printf("Adding element to list: %s\n", input);
         return 1;
 
     } else if (!strcmp(cmd, "count")) {
@@ -75,16 +68,16 @@ int classify(char* input[]) {
         printf("Printing list:\n");
         return 3;
 
-    } else if (!strcmp(cmd, "find") && 47 < *input[0] && *input[0] < 58) {
+    } else if (!strcmp(cmd, "find") && isdigit(input[i])) {
         // finds an element by position in list
 
         printf("Selecting element at position: %s\n", input);
         return 4;
 
-    } else if (!strcmp(cmd, "find") && ((64 < *input[0] && *input[0] < 91) || (96 < *input[0] && *input[0] < 123))) {
+    } else if (!strcmp(cmd, "find") && isalpha(input[i])) {
         // finds an element by its given name
 
-        printf("Finding element: '%s'\n", *input);
+        printf("Finding element: '%s'\n", input);
         return 5;
 
     } else if (!strcmp(cmd, "find")) {
@@ -114,7 +107,7 @@ int classify(char* input[]) {
     } else if (!strcmp(cmd, "cv")) {
         // changes value of current element
 
-        printf("Changing value of input to: %s\n", *input);
+        printf("Changing value of input to: %s\n", input);
         return 9;
 
     } else if (!strcmp(cmd, "del")) {
@@ -154,7 +147,7 @@ int classify(char* input[]) {
     } else {
         // if command unrecognized
 
-        printf("Command unrecognized; enter 'help' for list of commands");
+        printf("Command unrecognized; enter 'help' for list of commands\n");
         return 0;
     }
 
@@ -162,80 +155,69 @@ int classify(char* input[]) {
 
 
 // Case 1, Adds element to back of list
-void addBack(char* input[], LinkedList* List) {
+struct ListNode* addBack(char input[], struct LinkedList* List) {
 
         // Creates new node
-        ListNode* new_node = malloc(sizeof(ListNode));
+        struct ListNode* new_node = (struct ListNode*)malloc(sizeof(struct ListNode));
 
     //First part: sets pointers
 
-    if (main_list->tail == NULL) {
+    if (List->tail == NULL) {
         // if this is the first element added:
+
+        printf("first element added\n");
 
         new_node->next = NULL;
         new_node->prev = NULL;
-        main_list->head == &new_node;
-        main_list->tail == &new_node;
+        List->head = new_node;
+        List->tail = new_node;
     } else {
         // Otherwise connects new element with previous tail
 
-        ListNode* current = main_list->tail;
-        current->next = &new_node;
-        new_node->prev = &current;
-        main_list->tail = &new_node;
+        printf("not first element added");
+
+        struct ListNode* current = List->tail;
+        current->next = new_node;
+        new_node->prev = current;
+        List->tail = new_node;
     }
 
 
     // Second part: sets values
 
     //If first characters are numbers, set element value to them, then scan input for name
-    if ((47 < input[0] && input[0] < 58)) {
-        int in_value = atoi(*input);
+        int in_value = atoi(input);
         new_node->value = in_value;
 
         int i = 0;
         int q = 0;
+        int k = 0;
+        char numbers[30];
         while (input[i] != '\0') {
-            if (64 < *input[i] && *input[i] < 91) || (96 < *input[i] && *input[i] < 123) {
-                new_node->name[k] = input[i];
+            if (isalpha(input[i])) {
+                new_node->name[q] = input[i];
+                q++;
+            } else if (isdigit(input[i])) {
+                numbers[k] = input[i];
+                k++;
             }
             i++;
         }
-        
-
-    } else {
-        // Otherwise take input and set it to name
-
-        int i = 0;
-        while (input[i] != ' ' && input[i] != '\0') {
-            new_node->name[i] = input[i];
-            i++;
-        }
-        new_node->name[i] = '\0';
-
-        int k = 0;
-        char numbers[30];
-        while (input[i] != '\0' && (47 < input[++i] && input[i] < 58)) {
-            // If the file isn't over and the following characters are numbers, set val to them
-            numbers[k] = input[i];
-            k++;
-            i++;
-        }
-        new_node->value = atoi(*numbers);
-    }
+        new_node->value = atoi(numbers);
 
     printf("New node created\n" "Name: '%s'\n" "Value: %d\n", new_node->name, new_node->value);
 
 }
 
 
+
 // Case 2, Returns size of list
-int listSize(LinkedList* List) {
+int listSize(struct LinkedList* List) {
     if (List->head == NULL) {
         return 0;
     } else {
         int i = 0;
-        ListNode* cur = List->head;
+        struct ListNode* cur = List->head;
         while (cur->next != NULL) {
             cur = cur->next;
             i++;
@@ -246,28 +228,28 @@ int listSize(LinkedList* List) {
 
 
 // Case 3, Prints list with values
-void printList(LinkedList* List) {
+void printList(struct LinkedList* List) {
     if (List->head == NULL) {
         printf("List empty\n");
     }
 
         int i = 0;
-        ListNode* cur = List->head;
-        while (cur->next != NULL) {
+        struct ListNode* curr = List->head;
+        while (curr != NULL) {
             i++;
 
-            printf("%d) '%s', %d\n", i, cur->name, cur->value);
+            printf("%d) '%s', %d\n", i, curr->name, curr->value);
 
-            cur = cur->next;
+            curr = curr->next;
         }
-
+    return;
 }
-
+/*
 
 // Case 4, Finds element in list by number, prints name and shows value
-ListNode* findByPosition(char* input[], LinkedList* List) {
+struct ListNode* findByPosition(char* input[], struct LinkedList* List) {
     int i = 1;
-    int position = atoi(*input);
+    int position = atoi(input);
     ListNode* cur = List->head;
     while (i != position) {
         cur = cur->next;
@@ -279,17 +261,23 @@ ListNode* findByPosition(char* input[], LinkedList* List) {
 
 
 // Case 5, Finds element in list by name, calculates position in list and shows value
-ListNode* findByName(char name[], LinkedList* List) {
+struct ListNode* findByName(char name[], struct LinkedList* List) {
     if (List->head == NULL) {
         return NULL;
     } else {
-
+        ListNode* current = List->head;
+        while (current != NULL) {
+            if (strcmp(name, current->name)) {
+                return current;
+            }
+        }
     }
+    return NULL;
 }
 
 
 // Case 6, Moves to next element (towards back)
-void next(ListNode* cur, LinkedList* List) {
+void next(struct ListNode* cur, struct LinkedList* List) {
     if (cur == NULL) {
         cur = List->head;
     } else {
@@ -297,9 +285,9 @@ void next(ListNode* cur, LinkedList* List) {
     }
 }
 
-
+*/
 // Case 7, Moves to previous element (towards front/head)
-void prev(ListNode* cur, LinkedList* List) {
+void prev(struct ListNode* cur, struct LinkedList* List) {
     if (cur == NULL) {
         cur = List->tail;
     } else {
@@ -309,18 +297,20 @@ void prev(ListNode* cur, LinkedList* List) {
 
 
 // Case 8, Displays current element
-void currentElement(ListNode* cur) {
-    if (cur == NULL) {
+void currentElement(struct ListNode* cur) {
+    printf("currentElement\n");
+    struct ListNode* currente = cur;
+    if (currente == NULL) {
         printf("No element currently selected\n");
     } else {
-        printf("Current node: '%s', %d, position: %d", cur->name, cur->value, position(cur));
+        printf("Current node: '%s', %d, position: %d\n", currente->name, currente->value, position(currente));
     }
 }
-
+/*
 
 // Case 9, Modifies value of element in list
-void changeValue(ListNode* cur, char* input[]) {
-    int newValue = atoi(*input);
+void changeValue(ListNode* cur, char input[]) {
+    int newValue = atoi(input);
     if (cur == NULL || newValue != NULL) {
         printf("Error: invalid input\n");
         return;
@@ -424,13 +414,17 @@ void displayCommands() {
         fclose(command_list);
 }
 
-int position(ListNode* cur) {
-    if (cur == NULL) {
+// Case 15, returns position in list (index + 1)
+*/
+int position(struct ListNode* cur) {
+    printf("position\n");
+    struct ListNode* currente = cur;
+    if (currente == NULL) {
         return 0;
     } else {
         int i = 1;
-        while (cur->prev != NULL) {
-            cur = cur->prev;
+        while (currente->prev != NULL) {
+            currente = currente->prev;
             i++;
         }
         return i;

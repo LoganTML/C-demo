@@ -12,24 +12,44 @@
 int main() {
     
     //Initializes list
-    LinkedList List;
+    struct LinkedList List;
     List.head = NULL;
     List.tail = NULL;
 
-    LinkedList* list_pt = &List;
+    struct LinkedList* list_pt = &List;
 
     //Creates pointer to current node
-    ListNode* cur = NULL;
+    struct ListNode* cur = NULL;
 
     //Prints greeting
     char intro[] = "Enter information below";
-    printf("%c",intro);
+    printf("%s\n",intro);
 
+        //Code for initial debugging
+        char testAdd[] = "Add Abcd 15";
+        int q = classify(testAdd);
+        addBack(testAdd, list_pt);
+
+        cur = list_pt->tail;
+
+        printf("cur: %s\n", cur->name);
+
+        char testAdd2[] = "Add qwerty";
+        int e = classify(testAdd2);
+        addBack(testAdd2, list_pt);
+        
+        printf("q: %d\n", q);
+
+        position(cur);
+        currentElement(cur);
+        printList(list_pt);
+        printf("Cur name: '%s', value: %d\n", cur->name, cur->value);
+/*
     
     //Takes user input up to 30 characters
     char input[30];
     input[0] = '\0';
-    scanf("%s", input);
+    scanf("%30[^\n]", input);
 
     int classified = classify(input);
 
@@ -41,13 +61,13 @@ int main() {
             case 1:
                 //adds new element to back of list
                 printf("Case 1\n");
-                addBack(input, list_pt);
+                cur = addBack(input, list_pt);
             break;
 
             case 2:
                 //returns current number of elements in list
                 printf("Case 2\n");
-                fprint("List Size: %d", listSize);
+                printf("List Size: %d", listSize(&List));
             break;
 
             case 3:
@@ -144,7 +164,7 @@ int main() {
     }
 
 
-
+*/
 
     return 0;
 }
