@@ -43,7 +43,46 @@ int main() {
         position(cur);
         currentElement(cur);
         printList(list_pt);
+
         printf("Cur name: '%s', value: %d\n", cur->name, cur->value);
+
+        int list_size = listSize(list_pt);
+        printf("List size: %d\n", list_size);
+        
+        
+        
+        //Testing findByPosition
+        char testFindPos[] = "find 1";
+        char testFindPos2[] = "find 2";
+        int g = classify(testFindPos);
+        int h = classify(testFindPos2);
+        printf("g: %d, h: %d\n", g, h);
+        findByPosition(testFindPos, list_pt);
+        findByPosition(testFindPos2, list_pt);
+
+        //Testing findByName
+        char testFindName[] = "find Abcd";
+        char testFindName2[] = "find QWerty";
+        int zz = classify(testFindName);
+        int zzz = classify(testFindName2);
+        printf("zz: %d, zzz: %d\n", zz, zzz);
+        findByName(testFindName, list_pt);
+        cur = findByName(testFindName2, list_pt);
+
+        //Testing next, prev: bug with addback and tail/ next?
+        cur = next(cur, list_pt);
+        currentElement(cur);
+        cur = prev(cur, list_pt);
+        currentElement(cur);
+        cur = prev(cur, list_pt);
+        currentElement(cur);
+        cur = prev(cur, list_pt);
+        currentElement(cur);
+        cur = prev(cur, list_pt);
+        currentElement(cur);
+
+        //Testing changeValue
+        
 /*
     
     //Takes user input up to 30 characters

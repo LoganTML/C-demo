@@ -43,11 +43,11 @@ struct ListNode* findByName(char name[], struct LinkedList* List);
 
 
 // Case 6, Moves to next element (towards back)
-void next(struct ListNode* cur, struct LinkedList* List);
+struct ListNode* next(struct ListNode* cur, struct LinkedList* List);
 
 
 // Case 7, Moves to previous element (towards front/head)
-void prev(struct ListNode* cur, struct LinkedList* List);
+struct ListNode* prev(struct ListNode* cur, struct LinkedList* List);
 
 
 // Case 8, Displays current element

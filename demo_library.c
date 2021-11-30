@@ -29,8 +29,8 @@ int classify(char input[]) {
     //If there's more input after the command, removes command from the front of input
     if (input[i] == ' ') {
         int j = 0;
-        for (j = 0; input[i] != '\0'; j++) {
-                input[j] = input[i];
+        for (j = 0; input[i+1] != '\0'; j++) { //Plus 1 to avoid keeping the space 
+                input[j] = input[i+1];
                 i++;
         }
         input[j] = '\0';
@@ -48,6 +48,10 @@ int classify(char input[]) {
     Update: uses strlwn instead to convert all characters of cmd to lowercase;
         saves runtime for strcmp
     */
+
+   printf("input now: %s\natoi(input): %d\nisdigit(input): %d\n", input, atoi(input), isdigit(input[0]));
+
+   
 
 
     if (!strcmp(cmd, "add")) {
@@ -68,13 +72,13 @@ int classify(char input[]) {
         printf("Printing list:\n");
         return 3;
 
-    } else if (!strcmp(cmd, "find") && isdigit(input[i])) {
+    } else if (!strcmp(cmd, "find") && isdigit(input[0])) {
         // finds an element by position in list
 
-        printf("Selecting element at position: %s\n", input);
+        printf("Locating element at position: %s\n", input);
         return 4;
 
-    } else if (!strcmp(cmd, "find") && isalpha(input[i])) {
+    } else if (!strcmp(cmd, "find") && isalpha(input[0])) {
         // finds an element by its given name
 
         printf("Finding element: '%s'\n", input);
@@ -83,7 +87,7 @@ int classify(char input[]) {
     } else if (!strcmp(cmd, "find")) {
         // if input is invalid
 
-        printf("Invalid input. " "For list of available commands enter 'help'.\n");
+        printf("Invalid input. For list of available commands enter 'help'.\n");
         return 0;
 
     } else if (!strcmp(cmd, "next")) {
@@ -174,12 +178,13 @@ struct ListNode* addBack(char input[], struct LinkedList* List) {
     } else {
         // Otherwise connects new element with previous tail
 
-        printf("not first element added");
+        printf("not first element added\n");
 
-        struct ListNode* current = List->tail;
-        current->next = new_node;
-        new_node->prev = current;
+        struct ListNode* current_tail = List->tail;
+        current_tail->next = new_node;
+        new_node->prev = current_tail;
         List->tail = new_node;
+        new_node->next = NULL;
     }
 
 
@@ -218,7 +223,7 @@ int listSize(struct LinkedList* List) {
     } else {
         int i = 0;
         struct ListNode* cur = List->head;
-        while (cur->next != NULL) {
+        while (cur != NULL) {
             cur = cur->next;
             i++;
         }
@@ -244,13 +249,14 @@ void printList(struct LinkedList* List) {
         }
     return;
 }
-/*
+
 
 // Case 4, Finds element in list by number, prints name and shows value
-struct ListNode* findByPosition(char* input[], struct LinkedList* List) {
+struct ListNode* findByPosition(char input[], struct LinkedList* List) {
     int i = 1;
+    printf("findByPosition, input: %s\n", input);
     int position = atoi(input);
-    ListNode* cur = List->head;
+    struct ListNode* cur = List->head;
     while (i != position) {
         cur = cur->next;
         i++;
@@ -265,29 +271,35 @@ struct ListNode* findByName(char name[], struct LinkedList* List) {
     if (List->head == NULL) {
         return NULL;
     } else {
-        ListNode* current = List->head;
+        struct ListNode* current = List->head;
+        currentElement(current);
+        printf("name: %s, current->name: %s\n", name, current->name);
         while (current != NULL) {
-            if (strcmp(name, current->name)) {
+            if (!strcasecmp(name, current->name)) {
+                printf("Located!\n");
+                currentElement(current);
                 return current;
             }
+            current = current->next;
         }
     }
     return NULL;
 }
 
 
+
 // Case 6, Moves to next element (towards back)
-void next(struct ListNode* cur, struct LinkedList* List) {
+struct ListNode* next(struct ListNode* cur, struct LinkedList* List) {
     if (cur == NULL) {
         cur = List->head;
     } else {
-        cur = cur->next;
+        return cur->next;
     }
 }
 
-*/
+
 // Case 7, Moves to previous element (towards front/head)
-void prev(struct ListNode* cur, struct LinkedList* List) {
+struct ListNode* prev(struct ListNode* cur, struct LinkedList* List) {
     if (cur == NULL) {
         cur = List->tail;
     } else {
@@ -298,7 +310,7 @@ void prev(struct ListNode* cur, struct LinkedList* List) {
 
 // Case 8, Displays current element
 void currentElement(struct ListNode* cur) {
-    printf("currentElement\n");
+            // printf("currentElement\n"); was used for debugging
     struct ListNode* currente = cur;
     if (currente == NULL) {
         printf("No element currently selected\n");
@@ -306,10 +318,10 @@ void currentElement(struct ListNode* cur) {
         printf("Current node: '%s', %d, position: %d\n", currente->name, currente->value, position(currente));
     }
 }
-/*
+
 
 // Case 9, Modifies value of element in list
-void changeValue(ListNode* cur, char input[]) {
+void changeValue(struct ListNode* cur, char input[]) {
     int newValue = atoi(input);
     if (cur == NULL || newValue != NULL) {
         printf("Error: invalid input\n");
@@ -318,7 +330,7 @@ void changeValue(ListNode* cur, char input[]) {
     cur->value = newValue;
 }
 
-
+/*
 // Case 10, Removes element from list
 void removeElement(ListNode* cur, LinkedList* List) {
     if (cur == NULL) {
@@ -417,7 +429,7 @@ void displayCommands() {
 // Case 15, returns position in list (index + 1)
 */
 int position(struct ListNode* cur) {
-    printf("position\n");
+            // printf("position\n"); was used for debugging
     struct ListNode* currente = cur;
     if (currente == NULL) {
         return 0;
