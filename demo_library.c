@@ -323,88 +323,157 @@ void currentElement(struct ListNode* cur) {
 // Case 9, Modifies value of element in list
 void changeValue(struct ListNode* cur, char input[]) {
     int newValue = atoi(input);
-    if (cur == NULL || newValue != NULL) {
+    if (cur == NULL || input == NULL) {
         printf("Error: invalid input\n");
         return;
     }
     cur->value = newValue;
 }
 
-/*
+
 // Case 10, Removes element from list
-void removeElement(ListNode* cur, LinkedList* List) {
+// Always call "cur = NULL" immediately after
+void removeElement(struct ListNode* cur, struct LinkedList* List) {
     if (cur == NULL) {
+        printf("No element selected\n");
         return;
-    } else if (cur == List->head) {
+    } else if (cur == List->head && cur == List->tail) { //If cur is the only element in the list
+        printf("Only node in list, prepared for destruction\n");
+        List->head = NULL;
+        List->tail = NULL;
         free(cur);
-    } else if (cur == List->tail) {
+    } else if (cur == List->head) { //If cur is the head
+        printf("Head selected for deletion\n");
+        cur->next->prev = NULL;
+        List->head = cur->next;
+        free(cur);
+    } else if (cur == List->tail) { //If cur is the tail of the list
+        printf("Tail selected for deletion\n");
         cur->prev->next = NULL;
+        List->tail = cur->prev;
         free(cur);
-    } else {
+    } else { //If cur is a node between the head and tail
+        printf("Interior node selected for deletion\n");
         cur->next->prev = cur->prev;
         cur->prev->next = cur->next;
         free(cur);
     }
-    cur = NULL;
+    cur = NULL; //This doesn't work because cur is already freed. Is there a way to circumvent this?
 }
 
 
 // Case 11, moves element towards back of list
 // Slightly confusing because "next" goes towards the back, I know my b
-void moveBack(ListNode* cur, LinkedList* List) {
+void moveBack(struct ListNode* cur, struct LinkedList* List) {
 
     // If cur is null or last element in list, can't switch with next
-    if (cur == NULL || cur->next == NULL) {
+    if (cur == NULL) {
+        printf("No element currently selected\n");
+        return;
+    } else if (cur == List->tail) {
+        printf("Current element is already last in list\n");
+        return;
+    } else if (cur == List->tail && cur == List->head) {
+        printf("Current element is alone in list\n");
         return;
     }
 
-    ListNode* next_node = cur->next;
+    struct ListNode* other_node = cur->next; // Takes node in front of cur and moves it behind (i.e. towards the head of the list)
     
-    //Connect outsides to outsides
-    cur->next = next_node->next;
-    next_node->prev = cur->prev;
-    //Connect them to each other
-    cur->prev = next_node;
-    next_node->next = cur;
+    //Mirrors connections below, but for external nodes
+    if (cur->prev != NULL) {
+        cur->prev->next = other_node;
+    }
+    if (other_node->next != NULL) {
+        other_node->next->prev = cur;
+    }
 
+
+    //Connect outsides to outsides
+    cur->next = other_node->next;
+    other_node->prev = cur->prev;
+    //Connect them to each other
+    cur->prev = other_node;
+    other_node->next = cur;
+
+    printf("List->head is %d\n", List->head->value);
+    printf("cur is %d\n", cur->value);
+
+    if (cur == List->head) {  //If current element is head of list, the new element inserted behind cur must become the head
+        printf("Cur is head\n");
+        List->head = other_node;
+    }
+
+    if (other_node == List->tail) {
+        printf("Cur is one away from tail\n");
+        List->tail = cur;
+    }
+
+    return;
 }
 
 
 // Case 12, moves element towards top of list
-void moveUp(ListNode* cur, LinkedList* List) {
+void moveUp(struct ListNode* cur, struct LinkedList* List) {
     // If cur is first element, can't move up
-    if (cur == NULL || cur->prev == NULL) {
+    if (cur == NULL) {
+        printf("No element currently selected\n");
+        return;
+    } else if (cur == List->head) {
+        printf("Current element is already first in list\n");
+        return;
+    } else if (cur == List->head && cur == List->tail) {
+        printf("Current element is alone in list\n");
         return;
     }
 
-    ListNode* prev_node = cur->prev;
+    struct ListNode* other_node = cur->prev;
+
+    //Connects cur and other_node to external nodes (before and after)
+    if (cur->next != NULL) {
+        cur->next->prev = other_node;
+    }
+    if (other_node->prev != NULL) {
+        other_node->prev->next = cur;
+    }
+
 
     //Link outsides
-    cur->prev = prev_node->prev;
-    prev_node->next = cur->next;
+    cur->prev = other_node->prev;
+    other_node->next = cur->next;
     //Link insides
-    cur->next = prev_node;
-    prev_node->prev = cur;
+    cur->next = other_node;
+    other_node->prev = cur;
 
+    if (cur == List->tail) {
+        List->tail = other_node;
+    }
+
+    if (other_node == List->head) {
+        List->head = cur;
+    }
+
+    return;
 }
 
 
+
 // Case 13, Prints all elements and values to file and console in order.  Deletes list.
-void finalPrint(LinkedList* List) {
+void finalPrint(struct LinkedList* List) {
     if (List->head == NULL) {
         printf("List empty\n");
         return;
     } else {
-        ListNode* cur = NULL;
-        ListNode* next_e = List->head;
+        struct ListNode* cur = NULL;
+        struct ListNode* next_e = List->head;
 
         FILE* output_file = fopen("output.txt", "w+");
 
         int i = 0;
         while (next_e != NULL) {
             cur = next_e;
-            printf("%d) '%s', %d\n", ++i, cur->name, cur->value);
-            fprintf("%d) '%s', %d\n", ++i, cur->name, cur->value);
+            printf("%d" ") " "'%s'" ", " "%d\n", ++i, cur->name, cur->value);
+            fprintf(output_file, "%d" ") " "'%s'" ", " "%d\n", i, cur->name, cur->value);
 
             next_e = cur->next;
             free(cur);
@@ -426,8 +495,8 @@ void displayCommands() {
         fclose(command_list);
 }
 
-// Case 15, returns position in list (index + 1)
-*/
+// Case 15, returns position in list (given by index + 1)
+
 int position(struct ListNode* cur) {
             // printf("position\n"); was used for debugging
     struct ListNode* currente = cur;

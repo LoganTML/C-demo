@@ -59,7 +59,7 @@ void changeValue(struct ListNode* cur, char input[]);
 
 
 // Case 10, Removes element from list
-void removeElement(struct ListNode* cur, struct LinkedList* List);
+void removeElement(struct ListNode* cur, struct LinkedList* List);  // For now always use cur = NULL after removeElement
 
 
 // Case 11, moves element towards back of list

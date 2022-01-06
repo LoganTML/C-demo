@@ -8,6 +8,7 @@
     given, then can search, modify, and remove elements
     */
 
+   // Compiling: gcc main.c demo_library.c
 
 int main() {
     
@@ -62,7 +63,7 @@ int main() {
 
         //Testing findByName
         char testFindName[] = "find Abcd";
-        char testFindName2[] = "find QWerty";
+        char testFindName2[] = "find QWerty"; //Testing with incorrect capitalization
         int zz = classify(testFindName);
         int zzz = classify(testFindName2);
         printf("zz: %d, zzz: %d\n", zz, zzz);
@@ -82,7 +83,72 @@ int main() {
         currentElement(cur);
 
         //Testing changeValue
+
+        changeValue(cur, "29");
+        currentElement(cur);
+
+        //Testing removeElement, commented out so elements are still available for other fxns
+
+        /*
+
+        cur = prev(cur, list_pt); //Shifts to element "Abcd"
+        currentElement(cur);
+        removeElement(cur, list_pt); //Removes element "Abcd"
+        cur = NULL;
+        currentElement(cur); //After removal, should be null
+        printList(list_pt);
+        cur = next(cur, list_pt); //Should go to front of list, which is now "qwerty"
+        currentElement(cur);
+        cur = next(cur, list_pt); //No other elements in list, therefore should become null again
+        currentElement(cur);  
+        cur = prev(cur, list_pt); //Should go back to qwerty
+        currentElement(cur);
+        removeElement(cur, list_pt);    // Always use cur = NULL after removeElement as freeing cur in the library makes it unassigned here
+        cur = NULL;
+        printList(list_pt);
+        currentElement(cur);
+
+        */
+
+        //Testing moveBack
+
+        printf("Testing moveBack\n");
+        printList(list_pt);
+        currentElement(cur);
+        moveBack(cur, list_pt);
+        printList(list_pt);
+        cur = prev(cur, list_pt);
+        currentElement(cur);
+        printf("Last node: %d\n", list_pt->tail->value);
+        moveBack(cur, list_pt);
+        printList(list_pt);
+        printf("Last node: %d\n", list_pt->tail->value);
+
+        addBack(testAdd2, list_pt);
+        printList(list_pt);
+        printf("\n\nLast node: %d\n", list_pt->tail->value);
+        printf("First node: %d\n", list_pt->head->value);
+        currentElement(cur);
+        moveBack(cur, list_pt);
+        printList(list_pt);
+
+        //Testing moveUp
+
+        printf("\nTesting moveUp\n");
+        currentElement(cur);
+        moveUp(cur, list_pt);
+        printList(list_pt);
+        currentElement(cur);
+        moveUp(cur, list_pt);
+        printList(list_pt);
+        currentElement(cur);
+        moveBack(cur, list_pt);
+        printList(list_pt);
+        currentElement(cur);
         
+        //Testing finalPrint
+
+        finalPrint(list_pt);
 /*
     
     //Takes user input up to 30 characters

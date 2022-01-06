@@ -8,7 +8,7 @@ Commands:
 6. "next": Selects next element in list.  If no element is selected, selects first element in list.
 7. "prev": Selects previous element in list. If no element is selected, selects last element in list.
 8. "cur": Prints current element's name and value.
-9. "cv [+ number]": Changes curren element's value to given number.
+9. "cv [+ number]": Changes current element's value to given number.
 10. "del": Deletes current element.
 11. "back": Moves element one spot towards end of list.
 12. "forward": Moves element one spot towards beginning of list.
@@ -20,3 +20,5 @@ All commands work regardless of case.
 If possible use exactly one space between command and name/numbers.
 
 If you're a potential employer reading this please hire me.
+
+
