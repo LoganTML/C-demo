@@ -5,78 +5,78 @@
 
 
 //Defines ListNode
-typedef struct{
+struct ListNode{
         int value;
         char name[20];
-        ListNode* next;
-        ListNode* prev;
-    } ListNode;
+        struct ListNode* next;
+        struct ListNode* prev;
+};
 
-    typedef struct{
-    ListNode* head;
-    ListNode* tail;
-} LinkedList;
+struct LinkedList{
+    struct ListNode* head;
+    struct ListNode* tail;
+};
 
 
 //Checks input for value
-int classify(char* input[]);
+int classify(char input[]);
 
 
 // Case 1, Adds element to back of list
-void addBack(char* input[], LinkedList* List);
+struct ListNode* addBack(char input[], struct LinkedList* List);
 
 
 // Case 2, Returns size of list
-int listSize(LinkedList* List);
+int listSize(struct LinkedList* List);
 
 
 // Case 3, Prints list with values
-void printList(LinkedList* List);
+void printList(struct LinkedList* List);
 
 
 // Case 4, Finds element in list by number, prints name and shows value
-ListNode* findByPosition(char* input[], LinkedList* List);
+struct ListNode* findByPosition(char input[], struct LinkedList* List);
 
 
 // Case 5, Finds element in list by name, calculates position in list and shows value
-ListNode* findByName(char name[], LinkedList* List);
+struct ListNode* findByName(char name[], struct LinkedList* List);
 
 
 // Case 6, Moves to next element (towards back)
-void next(ListNode* cur, LinkedList* List);
+struct ListNode* next(struct ListNode* cur, struct LinkedList* List);
 
 
 // Case 7, Moves to previous element (towards front/head)
-void prev(ListNode* cur, LinkedList* List);
+struct ListNode* prev(struct ListNode* cur, struct LinkedList* List);
 
 
 // Case 8, Displays current element
-void currentElement(ListNode* cur);
+void currentElement(struct ListNode* cur);
 
 
 // Case 9, Modifies value of element in list
-void changeValue(ListNode* cur, int newValue);
+void changeValue(struct ListNode* cur, char input[]);
 
 
 // Case 10, Removes element from list
-void removeElement(ListNode* cur, LinkedList* List);
+void removeElement(struct ListNode* cur, struct LinkedList* List);  // For now always use cur = NULL after removeElement
 
 
 // Case 11, moves element towards back of list
-void moveBack(ListNode* cur, LinkedList* List);
+void moveBack(struct ListNode* cur, struct LinkedList* List);
 
 
 // Case 12, moves element towards front of list
-void moveUp(ListNode* cur, LinkedList* List);
+void moveUp(struct ListNode* cur, struct LinkedList* List);
 
 
 // Case 13, Prints all elements and values to file in order
-void finalPrint(LinkedList* List);
+void finalPrint(struct LinkedList* List);
 
 // Case 14, displays all possible commands
 void displayCommands();
 
 // Case 15, finds current element's index
-int position(ListNode* cur);
+int position(struct ListNode* cur); 
 
 #endif

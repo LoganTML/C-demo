@@ -1,0 +1,17 @@
+Visualization:
+
+e1 (head) ------ e2 ------ e3 ------ e4 ------ e5 (tail)
+
+low ----> ----> ----> ----> ----> high
+
+next ---->                            <---- prev
+
+<---- moveUp                      moveBack ---->
+
+addBack with e6 creates list: 
+
+e1 (head) ------ e2 ------ e3 ------ e4 ------ e5 ------ e6 (tail)
+
+moveUp with e3 selected gives:
+
+e1 (head) ------ e3 ------ e2 ------ e4 ------ e5 ------ e6 (tail)
